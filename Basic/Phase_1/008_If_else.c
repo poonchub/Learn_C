@@ -11,4 +11,7 @@ int main(){
     if (score>=50) {
         printf("You can tast.");
     }
+    else {
+        printf("You can not tast.");
+    }
 }
