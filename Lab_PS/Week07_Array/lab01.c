@@ -1,35 +1,34 @@
 #include <stdio.h>
 float read_num_of_student();
-void read_heights(int);
-float find_average(float [], float);
+void read_heights(float [],int);
+float find_average(float [], int);
     
 int main(){
-    read_num_of_student();
-
+    int x = read_num_of_student();
+    float y[x], avg;
+    read_heights(y, x);
+    avg = find_average(y, x);
+    printf("Average height: %.2f",avg);
 }
 
 float read_num_of_student(){
     int x;
     printf("Please enter the number of student: ");
     scanf("%d",&x);
-    read_heights(x);
-
+    return x;
 }
 
-void read_heights(int y){
-    float x[y], avg;
-    for (int i =0 ; i<y ; i++){
+void read_heights(float y[],int x){
+    for (int i =0 ; i<x ; i++){
         printf("Please enter student height [%d]: ",i+1);
-        scanf("%f",&x[i]);
+        scanf("%f",&y[i]);
     }
-    find_average(x,y);
-    
 }
-float find_average(float x[], float y){
+float find_average(float y[], int x){
     float sum = 0, avg;
-    for (int i = 0 ; i<y ; i++){
-        sum += x[i];
+    for (int i = 0 ; i<x ; i++){
+        sum += y[i];
     }
-    avg = sum/y;
-    printf("Average height: %.2f",avg);
+    avg = sum/x;
+    return avg;
 }
