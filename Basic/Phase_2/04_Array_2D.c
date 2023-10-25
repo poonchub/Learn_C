@@ -7,6 +7,7 @@ int main(){
     //การหาจำนวนข้อมูลภายใน array
     int row1 = sizeof(score1)/sizeof(score1[0]);
     int col1 = sizeof(score1[0])/sizeof(score1[0][0]);
+
     //การแสดงสมาชิก
     printf("Array score1[2][4]:");
     for (int i = 0 ; i<row1 ; i++){
@@ -15,6 +16,7 @@ int main(){
         }
     }
     printf("\n");
+    
     //กำหนดค่าให้ array
     // score2[0][0] = 5;
     // score2[0][1] = 10;
