@@ -1,124 +1,105 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <ctype.h>
+#include <string.h>
+#define MAX_STR 100
 
-#define MAX_SIZE 100
+typedef struct nd {
+    char c;
+    struct nd *next;
+}node;
+node *top = NULL;
 
-// โครงสร้างข้อมูลสำหรับ Stack
-struct Stack {
-    int top;
-    unsigned capacity;
-    char* array;
-};
-
-// ฟังก์ชันสร้าง Stack
-struct Stack* createStack(unsigned capacity) {
-    struct Stack* stack = (struct Stack*) malloc(sizeof(struct Stack));
-    stack->top = -1;
-    stack->capacity = capacity;
-    stack->array = (char*) malloc(stack->capacity * sizeof(char));
-    return stack;
+// function เพิ่มข้อมูลลง stack
+void push(int x){
+    node *n = malloc(sizeof(node));
+    n->next = top;
+    top = n;
+    n->c = x;
 }
 
-// ฟังก์ชันตรวจสอบว่า Stack เต็มหรือไม่
-int isFull(struct Stack* stack) {
-    return stack->top == stack->capacity - 1;
+// function ลบข้อมูลตัวสุดท้าย/ตัวบนสุด ใน stack และส่งคืนค่าที่ลบออก
+char pop(){
+    char p;
+    node *n;
+    n = top;
+    top = top->next;
+    p = n->c;
+    free(n);
+    return p;
 }
 
-// ฟังก์ชันตรวจสอบว่า Stack ว่างหรือไม่
-int isEmpty(struct Stack* stack) {
-    return stack->top == -1;
-}
-
-// ฟังก์ชันเพิ่มข้อมูลลงใน Stack
-void push(struct Stack* stack, char item) {
-    if (isFull(stack))
-        return;
-    stack->array[++stack->top] = item;
-}
-
-// ฟังก์ชันนำข้อมูลออกจาก Stack
-char pop(struct Stack* stack) {
-    if (isEmpty(stack))
-        return '\0';
-    return stack->array[stack->top--];
-}
-
-// ฟังก์ชันดึงข้อมูลจาก Stack โดยไม่ลบ
-char peek(struct Stack* stack) {
-    if (isEmpty(stack))
-        return '\0';
-    return stack->array[stack->top];
-}
-
-// ฟังก์ชันตรวจสอบว่าเป็นตัวอักษรหรือไม่
-int isOperand(char ch) {
-    return isalnum(ch);
-}
-
-// ฟังก์ชันตรวจสอบลำดับความสำคัญของตัวดำเนินการ
-int getPrecedence(char ch) {
-    switch (ch) {
-        case '+':
-        case '-':
-            return 1;
-        case '*':
-        case '/':
-            return 2;
-        case '^':
-            return 3;
+// function เช็คข้อมูลตัวสุดท้าย/ตัวบนสุด(top) ใน stack ว่าว่างหรือไม่ และส่งคืนข้อมูลที่อยู่ตำแหน่ง top
+char* stacktop(){
+    if (top==NULL){
+        return NULL;
     }
-    return -1;
-}
-
-// ฟังก์ชันแปลง Infix เป็น Postfix
-void infixToPostfix(char* infix) {
-    struct Stack* stack = createStack(MAX_SIZE);
-    int i, j;
-
-    for (i = 0, j = -1; infix[i]; ++i) {
-        // กรณีเป็น Operand
-        if (isOperand(infix[i]))
-            infix[++j] = infix[i];
-        // กรณีเป็น '('
-        else if (infix[i] == '(')
-            push(stack, infix[i]);
-        // กรณีเป็น ')'
-        else if (infix[i] == ')') {
-            while (!isEmpty(stack) && peek(stack) != '(')
-                infix[++j] = pop(stack);
-            if (!isEmpty(stack) && peek(stack) != '(')
-                return; // น่าจะเกิดข้อผิดพลาด
-            else
-                pop(stack);
-        }
-        // กรณีเป็น Operator
-        else {
-            while (!isEmpty(stack) && getPrecedence(infix[i]) <= getPrecedence(peek(stack)))
-                infix[++j] = pop(stack);
-            push(stack, infix[i]);
-        }
+    else {
+        return &(top->c);
     }
-
-    // นำข้อมูลที่เหลือใน Stack มาต่อท้าย Infix
-    while (!isEmpty(stack))
-        infix[++j] = pop(stack);
-
-    // ปิดสตริงด้วย null character
-    infix[++j] = '\0';
-
-    // แสดงผลลัพธ์
-    printf("Postfix: %s\n", infix);
 }
 
-int main() {
-    char infix[MAX_SIZE];
+// function เช็ค operator
+void calculate(char *ck){
+    int operand2 = pop();
+    int operand1 = pop();
+    int c;
 
-    printf("Enter Infix Expression: ");
-    gets(infix);
+    if (*ck == '+'){
+        c = (operand1)+(operand2);
+        push(c);
+    }
+    else if (*ck == '-'){
+        c = (operand1)-(operand2);
+        push(c);
+    }
+    else if (*ck == '*'){
+        c = (operand1)*(operand2);
+        push(c);
+    }
+    else if (*ck == '/'){
+        c = (operand1)/(operand2);
+        push(c);
+    }
+    else if (*ck == '^'){
+        c = (operand1)^(operand2);
+        push(c);
+    }
+}
 
-    infixToPostfix(infix);
+int main(){
 
-    return 0;
+    printf("Enter postfic expression: ");
+    char str[MAX_STR];
+    int last;
+    scanf("%s",&str);
+
+    printf("----------------------------------------------------\n");
+    printf("   %-10s%-13s%s\n",&"Step",&"Symbol",&"Stack");
+    printf("----------------------------------------------------\n");
+
+    for (int i=0 ; i<strlen(str); i++){
+        printf("    %-10d %-11c",i+1,str[i]);
+        for (int j=0 ; j<i+1; j++){
+            if (isdigit(str[j])){
+                push(str[j]-'0');
+            }
+            else {
+                calculate(&str[j]);
+            }
+            
+        }
+        // printf("%d ",*stacktop());
+
+        while (stacktop() != NULL){
+            last = pop();
+            printf("%d ", last);
+            if (stacktop() != NULL){
+                printf(", ");
+            }   
+        }
+        printf("\n");
+    }
+    printf("----------------------------------------------------\n");
+    printf("ผลลัพธ์ก็คือค่าสุดท้ายที่ได้ใน Stack ซึ่งคือ %d",last);
 }
