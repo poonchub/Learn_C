@@ -59,23 +59,21 @@ int checkpr(char temp){
 
 // function เช็ค operator
 void checkoper(char *ck, char ops[]){
-    // ถ้า top ว่าง ให้บันทึก operator ลง stack เลย
-    if (stacktop() == NULL){
+    if (stacktop() == NULL){        // ถ้า top ว่าง ให้บันทึก operator ลง stack เลย
         push(*ck);
     }
-    // ถ้า top ไม่ว่าง
-    else {
-        // ถ้า operator ที่รับเข้ามาสำคัญน้อยกว่าหรือเท่า operator ที่ตำแหน่ง top
-        if (checkpr(*ck) <= checkpr(*stacktop()))
-            // ให้วน loop เมื่อ operator ที่รับเข้ามาสำคัญน้อยกว่าหรือเท่า operator ที่ตำแหน่ง top และ top ไม่ว่าง เพื่อ pop ข้อมูลออกจาก stack
-            while ((stacktop() != NULL) && (checkpr(*ck) <= checkpr(*stacktop()))){
+    else {      // ถ้า top ไม่ว่าง
+        if (checkpr(*ck) <= checkpr(*stacktop())){      // ถ้า operator ที่รับเข้ามาสำคัญน้อยกว่าหรือเท่า operator ที่ตำแหน่ง top
+            while ((stacktop() != NULL) && (checkpr(*ck) <= checkpr(*stacktop()))){     // ให้วน loop เมื่อ operator ที่รับเข้ามาสำคัญน้อยกว่าหรือเท่า operator ที่ตำแหน่ง top และ top ไม่ว่าง เพื่อ pop ข้อมูลออกจาก stack
                 char temp = pop();
                 strncat(ops, &temp, 1);
-            }
-        // ทำการบันทึก operator ลง stack
-        push(*ck);
+            } 
+        }
+        push(*ck);      // ทำการบันทึก operator ลง stack
     }
 }
+
+// function แสดงค่าที่อยู่ใน stack
 void printstack(){
     node *current = top;
     int count = 0;
@@ -99,17 +97,17 @@ int main(){
     char str[MAX_STR];
 
     scanf("%s", str);
-    str[strlen(str) + 1] = ' ';
+    str[strlen(str) + 1] = ' ';     // เพิ่มจำนวนข้อมูลใน str[] อีก 1 ตัวเพื่อเพิ่ม loop อีก 1 รอบ
 
     printf("----------------------------------------------------\n");
     printf("   %-10s%-13s%-13s%s\n", "Step", "Symbol", "Stack", "Output");
     printf("----------------------------------------------------\n");
 
-    for (int i = 0; i < strlen(str) + 1; i++){
-        if (i == strlen(str)){
+    for (int i = 0; i <= strlen(str); i++){     // ทำการวน loop ตามจำนวนสมาชิกใน str[]
+        if (i == strlen(str)){      // เงื่อนไขการทำงานเมื่อ i เท่ากับจำนวนสมาชิกใน str[]
             char ops[MAX_STR] = "";
             printf("    %-10d %-11c", i + 1, ' ');
-            for (int j = 0; j < i + 1; j++){
+            for (int j = 0; j < i + 1; j++){        // ทำการวน loop ที่มีจำนวนรอบตามค่า i เพื่อทำการเช็คตัวอักษรใน str[] ตามเงื่อนไขต่างๆ
                 if (str[j] == '('){
                     push(str[j]);
                 }
@@ -137,12 +135,9 @@ int main(){
             printf("ผลลัพธ์ของนิพจน์แบบ Postfix คือ %s", ops);
             printf("\n");
         }
-
-        else {
+        else {      // เงื่อนไขการทำงานเมื่อ i น้อยกว่า่จำนวนสมาชิกใน str[]
             char ops[MAX_STR] = "";
-            if (i < strlen(str)){
-                printf("    %-10d %-11c", i + 1, str[i]);
-            }
+            printf("    %-10d %-11c", i + 1, str[i]);
             for (int j = 0; j < i + 1; j++){
                 if (str[j] == '('){
                     push(str[j]);
