@@ -138,7 +138,7 @@ int main(){
             printf("\n");
         }
 
-        if (i < strlen(str)){
+        else {
             char ops[MAX_STR] = "";
             if (i < strlen(str)){
                 printf("    %-10d %-11c", i + 1, str[i]);
