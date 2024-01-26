@@ -126,22 +126,23 @@ int main(){
                 else {
                     checkoper(&str[j], ops);
                 }
+            } 
+            while (stacktop() != NULL){
+                char temp = pop();
+                strncat(ops, &temp, 1);
             }
             printstack();
-            printf("%s", ops);
+            printf("%s\n", ops);
+            printf("----------------------------------------------------\n");
+            printf("ผลลัพธ์ของนิพจน์แบบ Postfix คือ %s", ops);
             printf("\n");
         }
 
-        if (i < strlen(str) + 1){
+        if (i < strlen(str)){
             char ops[MAX_STR] = "";
             if (i < strlen(str)){
                 printf("    %-10d %-11c", i + 1, str[i]);
             }
-            else {
-                printf("----------------------------------------------------\n");
-                printf("ผลลัพธ์ของนิพจน์แบบ Postfix คือ %s", ops);
-            }
-
             for (int j = 0; j < i + 1; j++){
                 if (str[j] == '('){
                     push(str[j]);
@@ -160,9 +161,7 @@ int main(){
                     checkoper(&str[j], ops);
                 }
             }
-            if (i < strlen(str)){
-                printstack();
-            }
+            printstack();
             printf("%s", ops);
             while (stacktop() != NULL){
                 pop();
