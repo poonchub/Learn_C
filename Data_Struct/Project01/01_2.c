@@ -4,13 +4,14 @@
 #include <string.h>
 #define MAX_STR 100
 
+// สร้างโครงสร้างข้อมูล
 typedef struct nd{
     char c;
     struct nd *next;
 } node;
 node *top = NULL;
 
-// function เพิ่มข้อมูลลง stack
+// ฟังก์ชันเพิ่มข้อมูลลง stack
 void push(char x){
     node *n = malloc(sizeof(node));
     n->next = top;
@@ -18,7 +19,7 @@ void push(char x){
     n->c = x;
 }
 
-// function ลบข้อมูลตัวสุดท้าย/ตัวบนสุด ใน stack และส่งคืนค่าที่ลบออก
+// ฟังก์ชันลบข้อมูล top ใน stack และส่งคืนค่าที่ลบออก
 char pop(){
     char p;
     node *n;
@@ -29,7 +30,7 @@ char pop(){
     return p;
 }
 
-// function เช็คข้อมูลตัวสุดท้าย/ตัวบนสุด(top) ใน stack ว่าว่างหรือไม่ และส่งคืนข้อมูลที่อยู่ตำแหน่ง top
+// ฟังก์ชันเช็คข้อมูล top ใน stack ว่าว่างหรือไม่ 
 char *stacktop(){
     if (top == NULL){
         return NULL;
@@ -39,7 +40,7 @@ char *stacktop(){
     }
 }
 
-// function เช็คลำดับความสำคัญของ operator
+// ฟังก์ชันเช็คลำดับความสำคัญของ operator
 int checkpr(char temp){
     int pr;
     if (temp == '('){
@@ -57,14 +58,14 @@ int checkpr(char temp){
     return pr;
 }
 
-// function เช็ค operator
+// ฟังก์ชันเช็ค operator
 void checkoper(char *ck, char ops[]){
-    if (stacktop() == NULL){        // ถ้า top ว่าง ให้บันทึก operator ลง stack เลย
+    if (stacktop() == NULL){
         push(*ck);
     }
-    else {      // ถ้า top ไม่ว่าง
-        if (checkpr(*ck) <= checkpr(*stacktop())){      // ถ้า operator ที่รับเข้ามาสำคัญน้อยกว่าหรือเท่า operator ที่ตำแหน่ง top
-            while ((stacktop() != NULL) && (checkpr(*ck) <= checkpr(*stacktop()))){     // ให้วน loop เมื่อ operator ที่รับเข้ามาสำคัญน้อยกว่าหรือเท่า operator ที่ตำแหน่ง top และ top ไม่ว่าง เพื่อ pop ข้อมูลออกจาก stack
+    else {
+        if (checkpr(*ck) <= checkpr(*stacktop())){
+            while ((stacktop() != NULL) && (checkpr(*ck) <= checkpr(*stacktop()))){
                 char temp = pop();
                 strncat(ops, &temp, 1);
             } 
@@ -73,7 +74,7 @@ void checkoper(char *ck, char ops[]){
     }
 }
 
-// function แสดงค่าที่อยู่ใน stack
+// ฟังก์ชันแสดงค่าที่อยู่ใน stack
 void printstack(){
     node *current = top;
     int count = 0;
@@ -92,34 +93,35 @@ void printstack(){
     printf("%-13s", oper);
 }
 
-// function เปลี่ยน infix เป็น postfix
+// ฟังก์ชันเปลี่ยน infix เป็น postfix
 void infixtopostfix(char str[], char ops[], int i){
-  for (int j = 0; j < i + 1; j++){
-    if (str[j] == '('){
-        push(str[j]);
+    for (int j = 0; j < i + 1; j++){
+        if (str[j] == '('){
+            push(str[j]);
+        }
+        else if (str[j] == ')'){
+            while ((*stacktop() != '(') && stacktop() != NULL){
+                char temp = pop();
+                strncat(ops, &temp, 1);
+            }
+            pop();
+        }
+        else if (isdigit(str[j]) || isalpha(str[j])){
+            strncat(ops, &str[j], 1);
+        }
+        else{
+            checkoper(&str[j], ops);
+        }
     }
-    else if (str[j] == ')'){
-        while ((*stacktop() != '(') && stacktop() != NULL){
+
+    if (i==strlen(str)){
+        while (stacktop() != NULL){
             char temp = pop();
             strncat(ops, &temp, 1);
         }
-        pop();
     }
-    else if (isdigit(str[j]) || isalpha(str[j])){
-        strncat(ops, &str[j], 1);
-    }
-    else{
-        checkoper(&str[j], ops);
-    }
-  }
-  if (i==strlen(str)){
-    while (stacktop() != NULL){
-        char temp = pop();
-        strncat(ops, &temp, 1);
-    }
-  }
-  printstack();
-  printf("%s\n", ops);
+    printstack();
+    printf("%s\n", ops);
 }
 
 int main(){

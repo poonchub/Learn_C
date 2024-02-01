@@ -4,13 +4,14 @@
 #include <string.h>
 #define MAX_STR 100
 
+// สร้างโครงสร้างข้อมูล
 typedef struct nd {
     char c;
     struct nd *next;
 }node;
 node *top = NULL;
 
-// function เพิ่มข้อมูลลง stack
+// ฟังก์ชันเพิ่มข้อมูลลง stack
 void push(int x){
     node *n = malloc(sizeof(node));
     n->next = top;
@@ -18,7 +19,7 @@ void push(int x){
     n->c = x;
 }
 
-// function ลบข้อมูลตัวสุดท้าย/ตัวบนสุด ใน stack และส่งคืนค่าที่ลบออก
+// ฟังก์ชันลบข้อมูล top ใน stack และส่งคืนค่าที่ลบออก
 char pop(){
     char p;
     node *n;
@@ -29,7 +30,7 @@ char pop(){
     return p;
 }
 
-// function เช็คข้อมูลตัวสุดท้าย/ตัวบนสุด(top) ใน stack ว่าว่างหรือไม่ และส่งคืนข้อมูลที่อยู่ตำแหน่ง top
+// ฟังก์ชันเช็คข้อมูล top ใน stack ว่าว่างหรือไม่ และส่งคืนข้อมูลที่อยู่ตำแหน่ง top
 char* stacktop(){
     if (top==NULL){
         return NULL;
@@ -39,7 +40,7 @@ char* stacktop(){
     }
 }
 
-// function เช็ค operator
+// ฟังก์ชันเช็ค operator และคำนวณผลลัพธ์
 void calculate(char *ck){
     int operand2 = pop();
     int operand1 = pop();
@@ -67,6 +68,7 @@ void calculate(char *ck){
     }
 }
 
+// ฟังก์ชันแสดงข้อมูลใน stack
 void printstack(){
     node *current = top;
     int count = 0;

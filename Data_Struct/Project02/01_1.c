@@ -165,7 +165,7 @@ void setAdMatrix(){
 
 int main(){
 
-    int numEdges, u, v, startNode;
+    int numEdges, startNode;
 
     // กำหนดจำนวน vertices
     numVertices = 7;
