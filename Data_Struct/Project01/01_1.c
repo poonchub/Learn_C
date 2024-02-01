@@ -7,7 +7,8 @@
 typedef struct nd{
     char c;
     struct nd *next;
-} node;
+} 
+node;
 node *top = NULL;
 
 // function เพิ่มข้อมูลลง stack
