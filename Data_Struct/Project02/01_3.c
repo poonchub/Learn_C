@@ -44,16 +44,22 @@ void DFS(int startVertex, int currentVertex, int pathLength, int check) {
 
     // DFS ไปยังตำแหน่งที่ยังไม่ได้เยือน
     for (int i = 0; i < numVertices; i++) {
+        if (pathLength>=2 && graph[currentVertex][check]==1){
+            printf("ok\n");
+            status=1;
+            // graph[check][currentVertex]=0;
+            // graph[currentVertex][check]=0;
+            break;
+        }
         
-        if (graph[currentVertex][i] == 1 && visited[i] == 0) {
+        else if (graph[currentVertex][i] == 1 && visited[i] == 0 && status==0) {
             count++;
             DFS(startVertex, i, pathLength + 1, check);
             
         }
         // if (count>=2 && graph[check][i]==1){
         //     printf("%d -> ",i);
-        //     graph[check][i]=0;
-        //     graph[i][check]=0;
+            
         //     // status=1;
         //     // graph[currentVertex][i]=0;
         //     // graph[i][currentVertex]=0;
@@ -69,7 +75,7 @@ void DFS(int startVertex, int currentVertex, int pathLength, int check) {
 void findAllCycles() {
     initializeVisited();
 
-    for (int i = 0; i < numVertices-4; i++) {
+    for (int i = 0; i < numVertices-3 ; i++) {
         count = 0;
         status = 0 ;
         DFS(i, i, 0, i);
