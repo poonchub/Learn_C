@@ -139,7 +139,7 @@ int main(){
         else {      // เงื่อนไขการทำงานเมื่อ i น้อยกว่า่จำนวนสมาชิกใน str[]
             char ops[MAX_STR] = "";
             printf("    %-10d %-11c", i + 1, str[i]);
-            for (int j = 0; j < i + 1; j++){
+            for (int j = 0; j < i + 1; j++){--
                 if (str[j] == '('){
                     push(str[j]);
                 }

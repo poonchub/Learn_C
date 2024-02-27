@@ -73,8 +73,7 @@ void findEuler(int numVertices, int startNode){
     for (int i = 0; i < path.size; i++){
         printf("%d ", path.nodes[i]);
     }
-
-    free(path.nodes);
+    // free(path.nodes);
 }
 
 // ฟังก์ชันเพิ่มเชื่อมต่อระหว่าง vertices u และ v
@@ -173,7 +172,7 @@ int main(){
 
     setAdMatrix();
     
-    // กรณีไม่มีวงจร Euler
+    // // กรณีไม่มีวงจร Euler
     // addEdge(0, 1);
     // addEdge(0, 2);
     // addEdge(1, 3);
